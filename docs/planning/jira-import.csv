@@ -1,0 +1,18 @@
+Summary,Description,Issue Type,Effort Points,Role Owner,Sprint,Milestone,Epic Link,Labels,Components
+Data Ingestion,Ingest NASA turbofan and synthetic ERP data,Story,8,Data Engineer,Sprint 1,Raw data available in Bronze layer,Data Pipeline,,Ingestion
+Encoding & Normalization,Normalize encodings, decimals, and characters,Story,5,Data Engineer,Sprint 1,Clean, standardized raw data,Data Pipeline,,Ingestion
+Data Provenance & Versioning,Implement data versioning and provenance tracking,Story,3,Data Engineer,Sprint 1,Ingestion logs and versioned datasets,Data Pipeline,,Ingestion
+Silver Layer Transformation,Standardize schema, business keys, and surrogate keys,Story,8,Analytics Engineer,Sprint 2,Silver-layer analytics-ready tables,Transformation,,Transformation
+Data Quality Tests,Implement dbt and Great Expectations tests,Story,5,Analytics Engineer,Sprint 2,All quality tests passing,Transformation,,Quality
+Gold Layer OEE & FHI Metrics,Calculate OEE and Factory Health Index (FHI),Story,8,Analytics Engineer,Sprint 3,Gold-layer marts with OEE/FHI,Analytics,,Analytics
+RUL Target Calculation,Implement RUL calculation logic,Story,5,ML Engineer,Sprint 3,RUL features in gold layer,Analytics,,Analytics
+Baseline ML Models,Train and validate Linear Regression, Random Forest models,Story,8,ML Engineer,Sprint 4,Baseline model benchmarks,ML,,Modeling
+Advanced ML Model (XGBoost),Train and validate XGBoost model,Story,5,ML Engineer,Sprint 4,Advanced model benchmark,ML,,Modeling
+Segmentation & Clustering,Implement K-means clustering for degradation patterns,Story,5,ML Engineer,Sprint 4,Asset clusters and pattern insights,ML,,Modeling
+Model Evaluation & Explainability,RMSE, MAE, and explainability artifacts,Story,5,ML Engineer,Sprint 4,Model evaluation report,ML,,Modeling
+Streamlit Maintenance Copilot,Build user-facing copilot for root-cause narration,Story,8,BI Analyst; Analytics Engineer,Sprint 5,Copilot UI deployed,UI,,UI
+Dashboard & Stakeholder Outputs,Develop dashboard-ready marts and visualizations,Story,5,BI Analyst,Sprint 5,Dashboard available to stakeholders,UI,,UI
+Observability & Alerting,Implement freshness/anomaly checks and alerting hooks,Story,5,Analytics Engineer,Sprint 5,Alerts and observability in place,Observability,,Observability
+Governance & Audit Trail,Document quality gates, SLAs, and audit trails,Story,5,Analytics Engineer,Sprint 6,Governance documentation complete,Governance,,Governance
+Runbook & Execution Evidence,Prepare runbook and execution evidence for reproducibility,Story,3,Data Engineer,Sprint 6,Runbook and evidence delivered,Governance,,Governance
+Phase Reports & Documentation,Complete phase reports and thesis-ready documentation,Story,5,All,Sprint 6,All documentation finalized,Governance,,Documentation
