@@ -1,0 +1,11 @@
+dbt:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: dbt/factory_analytics.db
+      threads: 4
+      extensions:
+        - json
+        - parquet
+        - excel

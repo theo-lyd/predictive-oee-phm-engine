@@ -5,13 +5,23 @@ Append all Bash shell commands here with timestamp, objective, command, and outc
 ## 2026-04-12: Batch Commit Correction and Traceability Enhancement
 
 ### Objective: List all staged changes for batching
-- Command: `git status --short`
-- Outcome: Displayed all staged files for logical grouping.
 
 ### Objective: Commit each logical batch
-- Command: `git commit -m "..." -- <folder>`
-- Outcome: Each batch committed with a clear, descriptive message.
 
 ### Objective: Force-push new commit history
-- Command: `git push --force origin master`
-- Outcome: Remote repository updated with corrected, batch-committed history.
+
+
+## 2026-04-12: Batch 1.1 - Environment & Secret Management
+
+### Objective: Create .devcontainer and Dockerfile for Codespace orchestration
+- Command: mkdir -p .devcontainer
+ - Command: touch .devcontainer/devcontainer.json .devcontainer/Dockerfile
+ - Outcome: Devcontainer and Dockerfile created for reproducible environment.
+
+### Objective: Start Airflow as Docker service
+- Command: docker compose -f .devcontainer/docker-compose.yml up -d
+ - Outcome: Airflow service running and accessible on port 8080.
+
+### Objective: Initialize DuckDB database
+- Command: python3 scripts/init_duckdb.py
+ - Outcome: factory_analytics.db created and ready for use.

@@ -1,0 +1,19 @@
+{
+  "name": "Predictive OEE PHM Engine DevContainer",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "settings": {},
+  "extensions": [
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "charliermarsh.ruff",
+    "ms-azuretools.vscode-docker"
+  ],
+  "postCreateCommand": "pip install dbt-core apache-airflow kaggle duckdb duckdb-engine",
+  "remoteEnv": {
+    "KAGGLE_USERNAME": "${{ secrets.KAGGLE_USERNAME }}",
+    "KAGGLE_KEY": "${{ secrets.KAGGLE_KEY }}"
+  },
+  "postStartCommand": "python3 .devcontainer/setup_kaggle_creds.py"
+}

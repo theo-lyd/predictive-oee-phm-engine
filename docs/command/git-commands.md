@@ -2,6 +2,14 @@
 
 Append all Git-related commands here with timestamp, objective, command, and outcome.
 
+## 2026-04-12: Batch 1.1 - Environment & Secret Management
+
+### Objective: Commit and push all changes for Batch 1.1
+- Command: git add .devcontainer/ airflow/ dbt/ scripts/ docs/command/bash-shell-commands.md docs/command/git-commands.md docs/governance/project-runbook.md docs/phase-reports/phase-1/phase-1-ingestion-report.md
+- Command: git commit -m "env+infra: complete Batch 1.1 (Codespace, Airflow, DuckDB, secrets)"
+- Command: git push origin master
+- Outcome: Batch 1.1 changes committed and pushed for traceability.
+
 ## 2026-04-12: Batch Commit Correction and Traceability Enhancement
 
 ### Objective: Identify the last (large batch) commit and its parent
