@@ -92,6 +92,22 @@ This implementation plan is structured to follow the **Developer Inner Loop** ph
 * **Chunk 4: The MSc Runbook:** Generate the final documentation including the Project Walkthrough, Business Blueprint, and Command Logs.
 
 ---
+
+## 2026-04-12: Batch Commit Correction & Traceability Enhancement
+
+**Summary:**
+To restore traceability, a mistaken large batch commit was replaced with a series of smaller, logical batch commits (data, architecture, business, command, etc.), each with a clear message. The improved history was force-pushed to the remote repository.
+
+**Rationale:**
+- Ensures each change is reviewable and auditable.
+- Aligns with best practices for collaborative and thesis-level projects.
+
+**Lessons Learned:**
+- Commit in logical batches, not all at once.
+- Document all corrective actions and commands.
+- Keep command and runbook files up to date for full transparency.
+
+---
 ### Why this is "Thesis-Level" Prowess:
 By the end of this plan, you will have built a **fully functional, predictive industrial system** on a local DuckDB engine. You will have successfully navigated:
 1. Complex Encodings: Solving for the "German Constraint."
