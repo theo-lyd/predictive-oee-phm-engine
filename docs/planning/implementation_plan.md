@@ -135,6 +135,51 @@ Implement data integrity and logic contracts at the Silver boundary using Great 
 * **Chunk 3: dbt Snapshots:** Initialize `dbt snapshots` on the equipment status table. This preserves the history of machine "States" (e.g., *Operational*, *Degraded*, *Maintenance*).
 * **Chunk 4: Late-Arriving Data Buffer:** Implement a windowed dbt incremental model to capture sensor heartbeats that arrive out of sequence.
 
+### Batch 3.2 Status: Complete (2026-04-13)
+- SCD Type 2 snapshot `erp_equipment_status_snapshot` implemented in `dbt/snapshots/` and executed, preserving equipment status history.
+- Incremental model `nasa_late_arrival_buffer` implemented in `dbt/models/gold/` and executed, ready to flag late-arriving NASA sensor heartbeats.
+- All models built and validated in DuckDB. No late arrivals detected in current data.
+- See `docs/phase-reports/phase-3/phase-3-gold-commands.md` for full command log and outcomes.
+
+### Batch 3.3: Integrity & Logic Contracts
+
+### Objective
+Implement data integrity and logic contracts at the Gold boundary using Great Expectations (GE) to ensure:
+- All "quality" scores are between 0 and 1 (inclusive)
+- All "sensor_timestamp" values are strictly increasing per unit (engine)
+
+### Key Steps
+- Created a new dbt Gold model `nasa_gold` for NASA sensor data, exposing:
+  - `quality`: Min-max normalized sensor value (sensor 6) per unit, always between 0 and 1
+  - `sensor_timestamp`: Uses the `cycle` column, strictly increasing per unit
+- Ensured the model sorts and deduplicates by `unit_number` and `cycle` for monotonicity
+- Implemented a Great Expectations suite in Python to validate:
+  - All `quality` values are in [0, 1]
+  - All `sensor_timestamp` values are strictly increasing per unit
+- Ran the GE suite and confirmed both expectations pass on the Gold table
+
+### Architectural/Naming Choices
+- **Physical Table Naming:** NASA raw data is ingested as `bronze_nasa_train_physical` to avoid dbt recursion issues. The dbt model `bronze_nasa_train` is a view on this physical table, enabling clean separation between ingestion and modeling layers.
+- **Gold Model Naming:** The Gold model is named `nasa_gold` to clearly indicate its layer and source. This avoids confusion with raw/bronze tables and supports modular pipeline design.
+- **Quality Definition:** "quality" is defined as a min-max normalized value of sensor 6 (column 5) per unit, ensuring it is always in [0, 1] and suitable for downstream OEE logic.
+- **Timestamp Definition:** "sensor_timestamp" is set to the `cycle` column, which is naturally strictly increasing per unit. Sorting and deduplication are enforced in the model to guarantee monotonicity.
+- **Validation Approach:** Great Expectations is used outside dbt for flexible, script-driven validation, as dbt-native tests are less expressive for these contracts.
+
+### Commands Executed
+- `python3 scripts/ingest_nasa_to_duckdb.py`  
+  *Ingest NASA sensor data as bronze_nasa_train_physical*
+- `dbt run --select bronze.bronze_nasa_train --project-dir dbt --profiles-dir dbt`  
+  *Register bronze_nasa_train as a dbt view on the physical table*
+- `dbt run --select gold.nasa_gold --project-dir dbt --profiles-dir dbt`  
+  *Build Gold layer model with contract-compliant fields*
+- `python3 great_expectations/run_gold_suite.py`  
+  *Run GE suite to validate quality and timestamp contracts*
+
+### Outcome
+- `nasa_gold` table created and validated in DuckDB.
+- All "quality" values are between 0 and 1; all "sensor_timestamp" values are strictly increasing per unit.
+- Batch 3.3 requirements are fully met and contract-compliant.
+
 ---
 
 # Phase 4: Predictive Intelligence & ML Tournament

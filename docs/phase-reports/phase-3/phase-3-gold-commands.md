@@ -27,3 +27,23 @@ Implement the core OEE (Overall Equipment Effectiveness) metrics at the Gold lay
   - $OEE = Availability \times Performance \times Quality$
 - The models use the Silver layer `nasa_silver` as the source for sensor and quality data.
 - All results validated in DuckDB.
+
+## Batch 3.2: Asset History (SCD Type 2)
+
+### Objective
+Track the full history of equipment status changes (SCD Type 2) and capture late-arriving NASA sensor heartbeats using windowed incremental logic.
+
+### Commands Executed
+- `source main_venv/bin/activate && dbt snapshot --select erp_equipment_status_snapshot --project-dir dbt --profiles-dir dbt`
+- `source main_venv/bin/activate && dbt run --select gold.nasa_late_arrival_buffer --project-dir dbt --profiles-dir dbt`
+- `source main_venv/bin/activate && python -c "import duckdb; print(duckdb.connect('dbt/factory_analytics.db').execute('SELECT * FROM nasa_late_arrival_buffer WHERE is_late_arrival = 1 LIMIT 10').fetchdf())"`
+
+### Outcome
+- SCD Type 2 snapshot `erp_equipment_status_snapshot` created and executed, preserving the full history of equipment status changes.
+- Incremental model `nasa_late_arrival_buffer` created and executed, ready to flag late-arriving NASA sensor heartbeats.
+- No late arrivals detected in current data, confirming model logic.
+
+### Notes
+- The snapshot uses the `check` strategy on the `status` column and tracks changes by `universal_asset_id`.
+- The late-arrival buffer uses a 5-cycle window to detect out-of-sequence sensor heartbeats per unit.
+- All results validated in DuckDB.
