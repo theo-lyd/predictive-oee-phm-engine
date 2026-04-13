@@ -3,7 +3,7 @@ dbt:
   outputs:
     dev:
       type: duckdb
-      path: dbt/factory_analytics.db
+      path: /workspaces/predictive-oee-phm-engine/dbt/factory_analytics.db
       threads: 4
       extensions:
         - json

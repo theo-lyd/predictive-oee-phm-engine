@@ -52,6 +52,11 @@ This implementation plan is structured to follow the **Developer Inner Loop** ph
 * **Chunk 1: The Encoding Shield:** Create a dbt macro to cast the raw ERP strings from `ISO-8859-1` to `UTF-8`. Encoding Shield: Develop dbt models that cast ISO-8859-1 raw strings into clean UTF-8
 * **Chunk 2: Umlaut & Abbreviation Logic:** Write SQL regex patterns to replace Umlaute (e.g., `Lagerstörung` $\rightarrow$ `Lagerstoerung`) and expand shorthand (e.g., `Prüf.` $\rightarrow$ `Pruefung`). Create a dbt macro to map German characters ($ü \rightarrow ue$) and expand logistical shorthand ($LKW \rightarrow Truck$).
 
+### Batch 2.1 Status: Complete (2026-04-13)
+- All ERP encoding normalization and German string handling logic is implemented and validated in the Silver layer.
+- `erp_maintenance_utf8` and `erp_maintenance_normalized` dbt models are operational and tested.
+- See docs/phase-reports/phase-2/phase-2-silver-commands.md for full command log and outcomes.
+
 ### Batch 2.2: Numeric & Temporal Harmonization
 * **Chunk 3: German Numeric Parser:** Transform German strings (`1.200,50`) into standard floats using `REPLACE` and `CAST` logic OR `regex`.
 * **Chunk 4: The Surrogate Key Engine:** Use `dbt_utils.generate_surrogate_key` to create a `universal_asset_id` that links the NASA engines to the German maintenance events.
