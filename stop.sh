@@ -6,5 +6,8 @@ echo "[stop.sh] Stopping Airflow webserver and scheduler..."
 pkill -f 'airflow webserver' || true
 pkill -f 'airflow scheduler' || true
 
+echo "[stop.sh] Stopping Postgres service..."
+sudo service postgresql stop
+
 echo "[stop.sh] No persistent dbt or script processes to stop."
 echo "[stop.sh] All services stopped."

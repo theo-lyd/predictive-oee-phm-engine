@@ -7,15 +7,13 @@ WORKSPACE="/workspaces/predictive-oee-phm-engine"
 AIRFLOW_VENV="$WORKSPACE/airflow_venv"
 MAIN_VENV="$WORKSPACE/main_venv"
 
-# -------------------------------
-# 1. Start Docker Compose
-# -------------------------------
-echo "🐳 Starting Docker Compose services (Postgres + Airflow container)..."
-docker compose -f .devcontainer/docker-compose.yml up -d
 
-# Wait for Postgres to be ready
-echo "⏳ Waiting for Postgres to become available..."
-sleep 5
+# -------------------------------
+# 1. Start Native Services
+# -------------------------------
+echo "🚦 Starting native services (no Docker)..."
+echo "🗄️  Starting Postgres service..."
+sudo service postgresql start
 
 # -------------------------------
 # 2. Initialize Airflow DB

@@ -42,21 +42,34 @@ airflow-init:
 
 .PHONY: up down status airflow dbt scripts
 
+
 up: start
 
 start:
-	@echo "Starting all services..."
-	bash ./start.sh
+    @echo "Starting all services..."
+    bash ./start.sh
 
 down: stop
 
 stop:
-	@echo "Stopping all services..."
-	bash ./stop.sh
+    @echo "Stopping all services..."
+    bash ./stop.sh
 
 status:
-	@echo "Service status:"
-	bash ./status.sh
+    @echo "Service status:"
+    bash ./status.sh
+
+postgres-start:
+    @echo "Starting Postgres..."
+    sudo service postgresql start
+
+postgres-stop:
+    @echo "Stopping Postgres..."
+    sudo service postgresql stop
+
+postgres-status:
+    @echo "Postgres status:"
+    sudo service postgresql status | grep Active
 
 airflow:
 	@echo "Starting Airflow..."
