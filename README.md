@@ -40,17 +40,16 @@ An Industry 4.0 predictive maintenance platform. Harmonizes NASA Turbofan IoT da
 
 ---
 
-## Orchestration Without Docker (Codespaces)
 
-This project uses a Makefile and shell scripts to orchestrate Airflow, dbt, and scripts natively, due to Codespaces' Docker restrictions. See [docs/architecture/architecture-critique-recommendation.md](docs/architecture/architecture-critique-recommendation.md) for the rationale and [docs/specification/architecture-specification.md](docs/specification/architecture-specification.md) for the updated architecture diagram.
+## Native Orchestration (No Docker, No LFS)
+
+This project now uses a Makefile and shell scripts (`start.sh`, `stop.sh`, `status.sh`) to orchestrate Airflow, dbt, and Postgres natively. Docker and Git LFS have been fully removed for maximum compatibility with Codespaces and local Linux environments. All data is managed directly in the workspace (no LFS required).
 
 ### Quickstart
-- `make up` – Start all services
+- `make up` – Start all services (Airflow, dbt, Postgres)
 - `make down` – Stop all services
 - `make status` – Show running services
 
-This approach ensures compatibility and ease of use in Codespaces and local environments.
-
----
+**Note:** If you previously used Docker or Git LFS, please update your local clone and remove any LFS hooks/configs.
 
 For a full project walkthrough, see the [Project Runbook](docs/governance/project-runbook.md) and [Implementation Plan](docs/planning/implementation_plan.md).

@@ -1,8 +1,9 @@
 # Data Specification Template
 
+
 ## 1. Data Sources
-- List and describe all data sources (sensor, ERP, etc.)
-- Data provenance and versioning
+- NASA Turbofan sensor data and simulated German ERP logs are ingested directly into the workspace (no LFS or external large file management required).
+- Data provenance and versioning are managed via Git and batch execution logs.
 
 ## 2. Data Schemas
 - Schema definitions for each source

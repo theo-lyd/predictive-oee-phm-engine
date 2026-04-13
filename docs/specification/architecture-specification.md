@@ -33,10 +33,11 @@
 ## 8. Appendices
 - Glossary, references, and supporting documents
 
+
 ## Codespaces-Native Orchestration
 
-- **Orchestration:** Makefile and shell scripts (`start.sh`, `stop.sh`, `status.sh`) manage Airflow, dbt, and scripts as native processes.
-- **No Docker Required:** Compatible with Codespaces and local Linux environments.
+- **Orchestration:** Makefile and shell scripts (`start.sh`, `stop.sh`, `status.sh`) manage Airflow, dbt, and Postgres as native processes.
+- **No Docker or LFS Required:** Fully compatible with Codespaces and local Linux environments. All data is managed directly in the workspace.
 - **Architecture Diagram:**
 
 ```mermaid

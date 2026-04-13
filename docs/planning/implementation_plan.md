@@ -5,17 +5,19 @@ This implementation plan is structured to follow the **Developer Inner Loop** ph
 # Phase 1: Foundation & Resilient Ingestion
 **Goal:** Establish the infrastructure and automate the retrieval of multi-modal data.
 
+
 ### Batch 1.1: Environment & Secret Management
 * **Chunk 1: Codespace Orchestration:** Configure `.devcontainer` to install `dbt-core`, `airflow`, `kaggle CLI`, DuckDB CLI, and `duckdb`.
 * **Chunk 2: Secure Credentials:** Inject `KAGGLE_USERNAME` and `KAGGLE_KEY` into GitHub Secrets. Map them to the Codespace environment.
-* **Chunk 3: Orchestration Setup: Launch Apache Airflow as a Docker service within the Codespace. Define the SCRIPTS_DIR for Python ingestion and DBT_DIR for transformations.
-* **Chunk 4: DuckDB Persistence: Initialize factory_analytics.db. Configure dbt profiles to point to this local file, ensuring it is mounted to a persistent volume.
+* **Chunk 3: Orchestration Setup:** Use Makefile and shell scripts to launch Airflow, dbt, and Postgres as native services (no Docker required). Define the SCRIPTS_DIR for Python ingestion and DBT_DIR for transformations.
+* **Chunk 4: DuckDB Persistence:** Initialize factory_analytics.db. Configure dbt profiles to point to this local file, ensuring it is mounted to a persistent volume.
+
 
 ### Batch 1.2: The "Dual Intake" Pipeline
-* **Chunk 5: NASA IoT Ingestion:** Write a Bash script to pull the **Turbofan Failure Data** via Kaggle CLI. Unzip into `data/raw/sensors/`. Implement a bash script triggered by Airflow that uses the Kaggle API (authenticated via GitHub Secrets) to pull the NASA Turbofan dataset into data/raw/sensors/.
+* **Chunk 5: NASA IoT Ingestion:** Write a Bash script to pull the **Turbofan Failure Data** via Kaggle CLI. Unzip into `data/raw/sensors/`. Implement a bash script triggered by Airflow that uses the Kaggle API (authenticated via GitHub Secrets) to pull the NASA Turbofan dataset into data/raw/sensors/ (no LFS required).
 * **Chunk 6: German ERP Simulation:** Execute `generate_german_erp.py` to create the legacy maintenance logs. 
 	* *Requirement:* Ensure the file is encoded in **ISO-8859-1** with German numeric formats (e.g., `1.500,00`). Export files in ISO-8859-1 encoding. Use German status strings (Instandhaltung erforderlich) and factory locations with Umlaute (München, Göttingen).
-* **Chunk 7: Airbyte/Postgres Setup:** Configure Airbyte to sync the simulated ERP data from a local Postgres container into the Bronze layer. Use Airbyte (running locally) to ingest the simulated ERP Postgres tables and the CSV sensor files into the Bronze Schema of DuckDB.
+* **Chunk 7: Airbyte/Postgres Setup:** Configure Airbyte to sync the simulated ERP data from a local Postgres instance into the Bronze layer. Use Airbyte (running natively) to ingest the simulated ERP Postgres tables and the CSV sensor files into the Bronze Schema of DuckDB.
 
 ---
 

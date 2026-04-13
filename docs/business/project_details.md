@@ -14,20 +14,22 @@ Unplanned downtime is a major source of lost revenue and operational inefficienc
 - Increase accuracy of RUL predictions (target: RMSE < 10 cycles)
 - Ensure full auditability and compliance with DACH-region standards
 
+
 ## 2. Technical Architecture & Stack
-- **Environment:** GitHub Codespaces (Dockerized)
+- **Environment:** GitHub Codespaces (native, no Docker)
 - **Ingestion:** Airbyte (ERP logs), Python/Airflow (IoT)
 - **Storage/Compute:** DuckDB (local), Snowflake (cloud)
 - **Transformation:** dbt (SQL/Python)
 - **ML:** Scikit-learn (RUL, clustering, forecasting)
 - **Observability:** Monte Carlo, Great Expectations
-- **Orchestration:** Airflow
+- **Orchestration:** Makefile & shell scripts (native Airflow, dbt, Postgres)
 - **CI/CD:** GitHub Actions
 - **Interface:** Streamlit (Copilot), Metabase (Dashboards)
 
 ## 3. Implementation Roadmap (Phased)
+
 **Phase I: Ingestion & Foundation**
-- Set up secure, reproducible ingestion for both NASA and simulated German ERP data
+- Set up secure, reproducible ingestion for both NASA and simulated German ERP data (no LFS required)
 - Automate late-arrival handling and ensure full traceability
 
 **Phase II: Data Refinery (Silver Layer)**

@@ -1,3 +1,25 @@
+# 2026-04-13: Native Orchestration, LFS Removal, and Batch Commits
+
+### Objective: Audit and batch-commit all changes for Docker/LFS removal and native orchestration
+- Command: git status --porcelain
+- Command: git add .devcontainer/Dockerfile .devcontainer/devcontainer.json
+- Command: git commit -m "Batch 1: Update devcontainer for passwordless sudo and remove Docker dependencies"
+- Command: git push
+- Command: git add Makefile start.sh stop.sh status.sh
+- Command: git commit -m "Batch 2: Update Makefile and orchestration scripts for native (non-Docker) Airflow, dbt, and Postgres management"
+- Command: git push
+- Command: git add -u
+- Command: git commit -m "Batch 3: Remove obsolete Docker Compose, multi-root workspace, and raw data files for native orchestration"
+- Command: git push
+
+### Objective: Remove Git LFS integration and hooks
+- Command: rm .git/hooks/post-commit .git/hooks/pre-push
+- Command: grep lfs .git/config
+- (Manual) Edit .git/config to remove LFS sections
+
+### Objective: General repo and hook inspection
+- Command: ls -la .git/hooks
+- Command: ls .git/hooks | grep lfs
 # Git Commands Log
 
 Append all Git-related commands here with timestamp, objective, command, and outcome.

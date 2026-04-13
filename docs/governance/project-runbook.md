@@ -16,25 +16,26 @@ Simulate legacy German ERP maintenance logs with correct encoding, numeric forma
 
 ### Outcome
 Simulated ERP logs are available for ingestion, with all German-specific requirements met.
+
 # Project Runbook
 
-Step-by-step reproduction guide for the project.
+Step-by-step reproduction guide for the project (native orchestration, no Docker or LFS).
 
 ---
 
 ## 2026-04-12: Batch 1.1 - Environment & Secret Management
 
 ### Scope
-Establish reproducible developer environment, secure credentials, orchestrate Airflow, and initialize persistent DuckDB analytics database.
+Establish reproducible developer environment, secure credentials, orchestrate Airflow, and initialize persistent DuckDB analytics database (all natively, no Docker/LFS).
 
 ### Steps
 1. Created `.devcontainer` with `devcontainer.json` and `Dockerfile` to install dbt-core, Airflow, kaggle CLI, DuckDB CLI, and duckdb.
 2. Added Codespaces secrets for `KAGGLE_USERNAME` and `KAGGLE_KEY`, mapped to environment and written to `~/.kaggle/kaggle.json`.
-3. Set up Airflow as a Docker service with SCRIPTS_DIR and DBT_DIR mapped for orchestration.
+3. Set up Airflow, dbt, and Postgres as native services using Makefile and shell scripts (`start.sh`, `stop.sh`, `status.sh`).
 4. Initialized persistent DuckDB database at `dbt/factory_analytics.db` and configured dbt profiles for local analytics.
 
 ### Outcome
-All foundational infrastructure for ingestion and analytics is reproducible, secure, and ready for further pipeline development.
+All foundational infrastructure for ingestion and analytics is reproducible, secure, and ready for further pipeline development (no Docker or LFS required).
 
 ---
 

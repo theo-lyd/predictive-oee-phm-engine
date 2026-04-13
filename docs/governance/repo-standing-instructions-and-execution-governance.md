@@ -1,3 +1,7 @@
+## Purpose
+This document defines the governance, quality, and documentation standards for the Predictive OEE PHM Engine. It ensures phase-by-phase, batch-driven delivery is reproducible, auditable, and thesis-ready—tailored for a local-first, open-source stack (Codespaces, DuckDB, dbt, Airbyte, Streamlit). All orchestration is now native (Makefile and shell scripts); Docker and Git LFS are no longer used.
+
+4. **Do not use Docker or Git LFS for orchestration or data management. All services and data are managed natively.**
 
 
 # Repo Standing Instructions and Execution Governance: Predictive OEE PHM Engine

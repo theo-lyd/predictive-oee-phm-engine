@@ -4,8 +4,10 @@
 - Purpose and scope of deployment and operations
 - Stakeholders and responsibilities
 
+
 ## 2. Deployment Process
-- Environment setup (local, cloud, Codespaces)
+- Environment setup (local, Codespaces; no Docker or LFS required)
+- Use Makefile and shell scripts to start/stop/status all services (Airflow, dbt, Postgres)
 - CI/CD pipeline steps
 - Rollback and recovery procedures
 

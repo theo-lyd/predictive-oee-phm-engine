@@ -2,7 +2,7 @@
 
 | ID  | Epic/Story                                      | Description                                                                 | Effort (Points) | Role Owner(s)           | Sprint | Milestone                                   |
 |-----|--------------------------------------------------|-----------------------------------------------------------------------------|-----------------|-------------------------|--------|----------------------------------------------|
-| 1   | Data Ingestion                                  | Ingest NASA turbofan and synthetic ERP data                                 | 8               | Data Engineer           | 1      | Raw data available in Bronze layer           |
+| 1   | Data Ingestion                                  | Ingest NASA turbofan and synthetic ERP data (no LFS; native scripts)        | 8               | Data Engineer           | 1      | Raw data available in Bronze layer           |
 | 2   | Encoding & Normalization                        | Normalize encodings, decimals, and characters                               | 5               | Data Engineer           | 1      | Clean, standardized raw data                 |
 | 3   | Data Provenance & Versioning                    | Implement data versioning and provenance tracking                           | 3               | Data Engineer           | 1      | Ingestion logs and versioned datasets        |
 | 4   | Silver Layer Transformation                     | Standardize schema, business keys, and surrogate keys                       | 8               | Analytics Engineer      | 2      | Silver-layer analytics-ready tables          |
@@ -17,7 +17,7 @@
 | 13  | Dashboard & Stakeholder Outputs                 | Develop dashboard-ready marts and visualizations                            | 5               | BI Analyst              | 5      | Dashboard available to stakeholders          |
 | 14  | Observability & Alerting                        | Implement freshness/anomaly checks and alerting hooks                       | 5               | Analytics Engineer      | 5      | Alerts and observability in place            |
 | 15  | Governance & Audit Trail                        | Document quality gates, SLAs, and audit trails                              | 5               | Analytics Engineer      | 6      | Governance documentation complete            |
-| 16  | Runbook & Execution Evidence                    | Prepare runbook and execution evidence for reproducibility                  | 3               | Data Engineer           | 6      | Runbook and evidence delivered               |
+| 16  | Runbook & Execution Evidence                    | Prepare runbook and execution evidence for reproducibility (native orchestration, no Docker/LFS) | 3               | Data Engineer           | 6      | Runbook and evidence delivered               |
 | 17  | Phase Reports & Documentation                   | Complete phase reports and thesis-ready documentation                       | 5               | All                     | 6      | All documentation finalized                  |
 
 ## Sprint Milestones
