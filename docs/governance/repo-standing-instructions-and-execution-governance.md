@@ -2,6 +2,14 @@
 
 # Repo Standing Instructions and Execution Governance: Predictive OEE PHM Engine
 
+## Standing Instructions (Critical Enforcement)
+
+1. **Do NOT commit or push any files or folders from `legacy-files/` under any circumstances.**
+2. **At the successful completion of each batch in every phase, always commit and push all relevant changes before proceeding.**
+3. **After each batch, update all necessary documentation files (README, runbook, command logs, phase reports, etc.) to reflect the work completed and lessons learned.**
+
+These instructions are mandatory and take precedence over all other workflow steps. Violations must be documented in the incident log and corrected immediately.
+
 ## Purpose
 This document defines the governance, quality, and documentation standards for the Predictive OEE PHM Engine. It ensures phase-by-phase, batch-driven delivery is reproducible, auditable, and thesis-ready—tailored for a local-first, open-source stack (Codespaces, DuckDB, dbt, Airbyte, Streamlit).
 

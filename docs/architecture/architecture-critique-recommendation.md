@@ -36,3 +36,33 @@
 ## 7. Appendices
 - Supporting evidence, diagrams, or references
 - Glossary of terms
+
+---
+
+# Decision: Native Orchestration in Codespaces (No Docker)
+
+## Context & Problem
+- **Codespaces Restriction:** Docker daemon access is not available in GitHub Codespaces for security reasons. Attempts to use Docker Compose or bind-mount the Docker socket failed due to platform limitations.
+- **Project Needs:** The project requires orchestration of Airflow, dbt, and supporting scripts for ETL/data engineering workflows.
+
+## Solution
+- **Native Orchestration:** Implemented a Makefile and shell scripts (`start.sh`, `stop.sh`, `status.sh`) to mimic Docker Compose behavior, orchestrating all services natively without Docker.
+- **Architecture Diagram:** Updated to reflect Codespaces-native, process-based orchestration.
+
+## Why This Solution Is Best
+- **Guaranteed Compatibility:** Works in Codespaces and any Linux environment, regardless of Docker availability.
+- **Simplicity:** No container overhead; direct process management is easier to debug and maintain.
+- **Portability:** Developers can run the same commands locally or in Codespaces.
+- **No Vendor Lock-in:** Not tied to Docker or Compose; can migrate to containers later if needed.
+
+## Alternatives Considered
+- **Docker Compose:** Not possible due to Codespaces restrictions.
+- **Cloud VM with Docker:** Adds cost and complexity, and reduces onboarding speed.
+
+## Implementation Guidance
+- Use `make up`, `make down`, and `make status` to orchestrate services.
+- See the root README for quickstart and the architecture diagram for process flow.
+
+---
+
+*Documented: April 2026*

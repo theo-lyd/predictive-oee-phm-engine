@@ -32,3 +32,28 @@
 
 ## 8. Appendices
 - Glossary, references, and supporting documents
+
+## Codespaces-Native Orchestration
+
+- **Orchestration:** Makefile and shell scripts (`start.sh`, `stop.sh`, `status.sh`) manage Airflow, dbt, and scripts as native processes.
+- **No Docker Required:** Compatible with Codespaces and local Linux environments.
+- **Architecture Diagram:**
+
+```mermaid
+flowchart TD
+    subgraph Codespace
+        direction TB
+        Airflow([Airflow Webserver & Scheduler])
+        dbt([dbt CLI])
+        Scripts([Utility Scripts])
+        Data([Data Directory])
+    end
+    Airflow -- Reads/Writes --> Data
+    dbt -- Reads/Writes --> Data
+    Scripts -- Reads/Writes --> Data
+    Airflow -- Triggers --> dbt
+    Scripts -- Triggers --> Airflow
+    Scripts -- Triggers --> dbt
+```
+
+- **Rationale:** See [architecture-critique-recommendation.md](../architecture/architecture-critique-recommendation.md) for decision details.

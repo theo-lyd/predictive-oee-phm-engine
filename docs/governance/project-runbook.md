@@ -1,3 +1,21 @@
+---
+
+## 2026-04-12: Batch 1.2 - German ERP Simulation
+
+### Scope
+Simulate legacy German ERP maintenance logs with correct encoding, numeric formats, and Umlaute for ingestion pipeline testing.
+
+### Steps
+1. Created scripts/generate_german_erp.py to generate ERP logs with:
+	- ISO-8859-1 encoding
+	- German numeric formats (e.g., 1.500,00)
+	- German status strings (e.g., 'Instandhaltung erforderlich')
+	- Factory locations with Umlaute (e.g., 'München', 'Göttingen')
+2. Ran the script to produce data/raw/erp_maintenance_logs.csv.
+3. Verified encoding and format in the output file.
+
+### Outcome
+Simulated ERP logs are available for ingestion, with all German-specific requirements met.
 # Project Runbook
 
 Step-by-step reproduction guide for the project.
@@ -17,6 +35,23 @@ Establish reproducible developer environment, secure credentials, orchestrate Ai
 
 ### Outcome
 All foundational infrastructure for ingestion and analytics is reproducible, secure, and ready for further pipeline development.
+
+---
+
+## 2026-04-12: Batch 1.2 - NASA IoT Ingestion
+
+### Scope
+Automate and document the ingestion of NASA Turbofan Failure Data using Airflow and the Kaggle CLI.
+
+### Steps
+1. Wrote Bash script (scripts/download_nasa_turbofan.sh) to download and extract NASA Turbofan data from Kaggle into data/raw/sensors/.
+2. Created Airflow DAG (airflow/dags/nasa_turbofan_ingestion.py) to trigger the Bash script.
+3. Restarted Airflow service to register the new DAG.
+4. Manually triggered the DAG via Airflow UI to ingest data.
+5. Verified all expected files in data/raw/sensors/.
+
+### Outcome
+NASA Turbofan Failure Data is reproducibly ingested and available for downstream processing. All steps are automated and auditable via Airflow and command logs.
 
 ---
 

@@ -1,3 +1,3 @@
-# Docker Commands Log
+# Docker Commands Log (Deprecated)
 
-Append all Docker-related commands here with timestamp, objective, command, and outcome.
+**Note:** As of April 2026, Docker is no longer used for orchestration in this project. See the root README and architecture docs for the new process-based orchestration approach.
