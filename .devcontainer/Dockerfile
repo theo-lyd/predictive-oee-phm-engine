@@ -20,3 +20,7 @@ RUN curl -L https://github.com/duckdb/duckdb/releases/download/v0.10.2/duckdb_cl
     && rm duckdb_cli.zip
 
 WORKDIR /workspaces/predictive-oee-phm-engine
+
+# Configure passwordless sudo for vscode user
+RUN echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/99-vscode-nopasswd
+RUN chmod 0440 /etc/sudoers.d/99-vscode-nopasswd
