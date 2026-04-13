@@ -61,6 +61,12 @@ This implementation plan is structured to follow the **Developer Inner Loop** ph
 * **Chunk 3: German Numeric Parser:** Transform German strings (`1.200,50`) into standard floats using `REPLACE` and `CAST` logic OR `regex`.
 * **Chunk 4: The Surrogate Key Engine:** Use `dbt_utils.generate_surrogate_key` to create a `universal_asset_id` that links the NASA engines to the German maintenance events.
 
+#### ✅ Batch 2.2 Status: Complete (2026-04-13)
+- German numeric parser implemented: parses German-formatted numbers (e.g., "1.200,50") to floats in `erp_maintenance_numeric`.
+- Surrogate key engine implemented: generates `universal_asset_id` in `erp_maintenance_surrogate` using `dbt_utils.generate_surrogate_key`.
+- All models built and validated in DuckDB.
+- See docs/phase-reports/phase-2/phase-2-silver-commands.md for full command log and outcomes.
+
 ### Batch 2.3: Integrity & Logic Contracts
 * **Chunk 5: Great Expectations (GE) Suite: Define GE checkpoints at the Silver boundary to ensure "Quality" scores are between $0$ and $1$ and that sensor timestamps are strictly increasing.
 ---

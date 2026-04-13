@@ -219,3 +219,8 @@ Thumbs.db
 # Data folders (do not commit large/generated data)
 data/postgres/
 data/raw/
+
+# dbt artifacts and packages
+/dbt/dbt_packages/
+/dbt/package-lock.yml
+/dbt/packages.yml
