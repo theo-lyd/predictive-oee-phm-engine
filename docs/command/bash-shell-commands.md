@@ -41,3 +41,9 @@ Append all Bash shell commands here with timestamp, objective, command, and outc
 ### Objective: Initialize DuckDB database
 - Command: python3 scripts/init_duckdb.py
  - Outcome: factory_analytics.db created and ready for use.
+
+## 2026-04-13: Batch 1.2 - Dual Intake Pipeline (Native Ingestion)
+
+### Objective: Ingest ERP and NASA data into DuckDB (Bronze Layer)
+- Command: bash scripts/run_all.sh
+- Outcome: All ingestion scripts completed. Data loaded into DuckDB.

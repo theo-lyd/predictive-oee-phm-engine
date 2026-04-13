@@ -13,11 +13,35 @@ This implementation plan is structured to follow the **Developer Inner Loop** ph
 * **Chunk 4: DuckDB Persistence:** Initialize factory_analytics.db. Configure dbt profiles to point to this local file, ensuring it is mounted to a persistent volume.
 
 
-### Batch 1.2: The "Dual Intake" Pipeline
-* **Chunk 5: NASA IoT Ingestion:** Write a Bash script to pull the **Turbofan Failure Data** via Kaggle CLI. Unzip into `data/raw/sensors/`. Implement a bash script triggered by Airflow that uses the Kaggle API (authenticated via GitHub Secrets) to pull the NASA Turbofan dataset into data/raw/sensors/ (no LFS required).
-* **Chunk 6: German ERP Simulation:** Execute `generate_german_erp.py` to create the legacy maintenance logs. 
-	* *Requirement:* Ensure the file is encoded in **ISO-8859-1** with German numeric formats (e.g., `1.500,00`). Export files in ISO-8859-1 encoding. Use German status strings (Instandhaltung erforderlich) and factory locations with Umlaute (München, Göttingen).
-* **Chunk 7: Airbyte/Postgres Setup:** Configure Airbyte to sync the simulated ERP data from a local Postgres instance into the Bronze layer. Use Airbyte (running natively) to ingest the simulated ERP Postgres tables and the CSV sensor files into the Bronze Schema of DuckDB.
+### Batch 1.2: Dual Intake Pipeline (Native Ingestion)
+
+### What was implemented:
+* Bash script to download NASA Turbofan Failure Data via Kaggle CLI (scripts/download_nasa_turbofan.sh)
+* Python script to generate German ERP logs in ISO-8859-1 with German formats (scripts/generate_german_erp.py)
+* Python script to ingest ERP logs into DuckDB (scripts/ingest_erp_to_duckdb.py)
+* Python script to ingest NASA sensor data into DuckDB (scripts/ingest_nasa_to_duckdb.py)
+* Batch runner script to execute all ingestion steps (scripts/run_all.sh)
+* All commands and outcomes logged in docs/command/* and docs/phase-reports/phase-1/phase-1-ingestion-commands.md
+* Airbyte replaced by native Python + dbt + DuckDB scripts for ingestion (no Airbyte required)
+
+### How to run the full pipeline:
+1. Download NASA data: `bash scripts/download_nasa_turbofan.sh`
+2. Generate ERP logs: `python3 scripts/generate_german_erp.py`
+3. Ingest ERP logs: `python3 scripts/ingest_erp_to_duckdb.py`
+4. Ingest NASA data: `python3 scripts/ingest_nasa_to_duckdb.py`
+5. (Batch) Run all: `bash scripts/run_all.sh`
+
+### Where to find the data:
+* NASA sensor files: data/raw/sensors/
+* ERP logs: data/raw/erp_maintenance_logs.csv
+* DuckDB tables: bronze_erp_maintenance_logs, bronze_nasa_train, bronze_nasa_test (in dbt/factory_analytics.db)
+
+### Where to find the logs:
+* Command logs: docs/command/
+* Phase 1 ingestion log: docs/phase-reports/phase-1/phase-1-ingestion-commands.md
+
+### Airbyte replacement:
+* All ingestion is now handled natively via Python scripts and dbt. No Airbyte or Docker required.
 
 ---
 

@@ -53,3 +53,21 @@ This project now uses a Makefile and shell scripts (`start.sh`, `stop.sh`, `stat
 **Note:** If you previously used Docker or Git LFS, please update your local clone and remove any LFS hooks/configs.
 
 For a full project walkthrough, see the [Project Runbook](docs/governance/project-runbook.md) and [Implementation Plan](docs/planning/implementation_plan.md).
+
+---
+
+## Batch 1.2: Dual Intake Pipeline (Native Ingestion)
+
+This project natively ingests both NASA Turbofan IoT data and simulated German ERP logs into DuckDB using Python and Bash scripts (no Airbyte, no Docker required).
+
+### Ingestion Steps
+1. Download NASA data: `bash scripts/download_nasa_turbofan.sh`
+2. Generate ERP logs: `python3 scripts/generate_german_erp.py`
+3. Ingest ERP logs: `python3 scripts/ingest_erp_to_duckdb.py`
+4. Ingest NASA data: `python3 scripts/ingest_nasa_to_duckdb.py`
+5. (Batch) Run all: `bash scripts/run_all.sh`
+
+- All commands and outcomes are logged in [docs/command/](docs/command/) and [docs/phase-reports/phase-1/phase-1-ingestion-commands.md](docs/phase-reports/phase-1/phase-1-ingestion-commands.md)
+- Airbyte has been fully replaced by native Python + dbt + DuckDB scripts for ingestion.
+
+See [Implementation Plan](docs/planning/implementation_plan.md) for details.
