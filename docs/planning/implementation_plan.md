@@ -118,6 +118,19 @@ Implement data integrity and logic contracts at the Silver boundary using Great 
 * **Chunk 2: Quality & OEE Final:** Aggregate the metrics into a final OEE score:
 	$$OEE = Availability \times Performance \times Quality$$ at the asset and factory levels.
 
+### Batch 3.1 Status: Complete (2026-04-13)
+- Gold layer models `oee_availability_performance` and `oee_final` implemented in `dbt/models/gold/`.
+- Models calculate Availability, Performance, and aggregate OEE at the asset level using Silver layer outputs.
+- All models built and validated in DuckDB. Sample output:
+
+| unit_number | availability | performance | quality   | oee      |
+|-------------|--------------|-------------|-----------|----------|
+| 1           | 1.0          | 1.0         | 0.060269  | 0.060269 |
+| 2           | 1.0          | 1.0         | 1.000000  | 1.000000 |
+| ...         | ...          | ...         | ...       | ...      |
+
+- See `docs/phase-reports/phase-3/phase-3-gold-commands.md` for full command log and outcomes.
+
 ### Batch 3.2: Asset History (SCD Type 2)
 * **Chunk 3: dbt Snapshots:** Initialize `dbt snapshots` on the equipment status table. This preserves the history of machine "States" (e.g., *Operational*, *Degraded*, *Maintenance*).
 * **Chunk 4: Late-Arriving Data Buffer:** Implement a windowed dbt incremental model to capture sensor heartbeats that arrive out of sequence.
