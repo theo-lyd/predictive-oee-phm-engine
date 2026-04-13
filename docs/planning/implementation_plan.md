@@ -68,7 +68,44 @@ This implementation plan is structured to follow the **Developer Inner Loop** ph
 - See docs/phase-reports/phase-2/phase-2-silver-commands.md for full command log and outcomes.
 
 ### Batch 2.3: Integrity & Logic Contracts
-* **Chunk 5: Great Expectations (GE) Suite: Define GE checkpoints at the Silver boundary to ensure "Quality" scores are between $0$ and $1$ and that sensor timestamps are strictly increasing.
+
+### Objective
+Implement data integrity and logic contracts at the Silver boundary using Great Expectations (GE) to ensure:
+- All "quality" scores are between 0 and 1 (inclusive)
+- All "sensor_timestamp" values are strictly increasing per unit (engine)
+
+### Key Steps
+- Created a new dbt Silver model `nasa_silver` for NASA sensor data, exposing:
+  - `quality`: Min-max normalized sensor value (sensor 6) per unit, always between 0 and 1
+  - `sensor_timestamp`: Uses the `cycle` column, strictly increasing per unit
+- Ensured the model sorts and deduplicates by `unit_number` and `cycle` for monotonicity
+- Implemented a Great Expectations suite in Python to validate:
+  - All `quality` values are in [0, 1]
+  - All `sensor_timestamp` values are strictly increasing per unit
+- Ran the GE suite and confirmed both expectations pass on the Silver table
+
+### Architectural/Naming Choices
+- **Physical Table Naming:** NASA raw data is ingested as `bronze_nasa_train_physical` to avoid dbt recursion issues. The dbt model `bronze_nasa_train` is a view on this physical table, enabling clean separation between ingestion and modeling layers.
+- **Silver Model Naming:** The Silver model is named `nasa_silver` to clearly indicate its layer and source. This avoids confusion with raw/bronze tables and supports modular pipeline design.
+- **Quality Definition:** "quality" is defined as a min-max normalized value of sensor 6 (column 5) per unit, ensuring it is always in [0, 1] and suitable for downstream OEE logic.
+- **Timestamp Definition:** "sensor_timestamp" is set to the `cycle` column, which is naturally strictly increasing per unit. Sorting and deduplication are enforced in the model to guarantee monotonicity.
+- **Validation Approach:** Great Expectations is used outside dbt for flexible, script-driven validation, as dbt-native tests are less expressive for these contracts.
+
+### Commands Executed
+- `python3 scripts/ingest_nasa_to_duckdb.py`  
+  *Ingest NASA sensor data as bronze_nasa_train_physical*
+- `dbt run --select bronze.bronze_nasa_train --project-dir dbt --profiles-dir dbt`  
+  *Register bronze_nasa_train as a dbt view on the physical table*
+- `dbt run --select silver.nasa_silver --project-dir dbt --profiles-dir dbt`  
+  *Build Silver layer model with contract-compliant fields*
+- `python3 great_expectations/run_silver_suite.py`  
+  *Run GE suite to validate quality and timestamp contracts*
+
+### Outcome
+- `nasa_silver` table created and validated in DuckDB.
+- All "quality" values are between 0 and 1; all "sensor_timestamp" values are strictly increasing per unit.
+- Batch 2.3 requirements are fully met and contract-compliant.
+
 ---
 
 # Phase 3: Analytics Engineering & OEE Logic (Gold Layer)

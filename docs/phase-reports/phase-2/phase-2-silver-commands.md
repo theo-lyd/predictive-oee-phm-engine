@@ -45,3 +45,25 @@ Implement German numeric parsing and surrogate key generation for ERP data in th
 ### Outcome
 - Both `erp_maintenance_numeric` and `erp_maintenance_surrogate` tables created and validated in DuckDB.
 - All requirements for Batch 2.2 are complete and operational.
+
+---
+
+## Batch 2.3: Integrity & Logic Contracts
+
+### Objective
+Implement data integrity and logic contracts at the Silver boundary using Great Expectations (GE) to ensure:
+- All "quality" scores are between 0 and 1 (inclusive)
+- All "sensor_timestamp" values are strictly increasing per unit (engine)
+
+### Key Steps
+- Created dbt Silver model `nasa_silver` with contract-compliant fields
+- Implemented and ran GE suite to validate both contracts
+
+### Commands Executed
+- `python3 scripts/ingest_nasa_to_duckdb.py`
+- `dbt run --select bronze.bronze_nasa_train --project-dir dbt --profiles-dir dbt`
+- `dbt run --select silver.nasa_silver --project-dir dbt --profiles-dir dbt`
+- `python3 great_expectations/run_silver_suite.py`
+
+### Outcome
+- All contract requirements for Batch 2.3 are met and validated.

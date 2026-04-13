@@ -1,0 +1,24 @@
+{
+  "expectation_suite_name": "silver_layer_suite",
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "Quality",
+        "min_value": 0.0,
+        "max_value": 1.0,
+        "strict_min": false,
+        "strict_max": false
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_increasing",
+      "kwargs": {
+        "column": "sensor_timestamp"
+      }
+    }
+  ],
+  "meta": {
+    "notes": "Checks that Quality is between 0 and 1, and sensor_timestamp is strictly increasing."
+  }
+}
