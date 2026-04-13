@@ -1,19 +1,46 @@
 {
   "name": "Predictive OEE PHM Engine DevContainer",
+
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "settings": {},
-  "extensions": [
-    "ms-python.python",
-    "ms-toolsai.jupyter",
-    "charliermarsh.ruff",
-    "ms-azuretools.vscode-docker"
-  ],
-  "postCreateCommand": "pip install dbt-core apache-airflow kaggle duckdb duckdb-engine",
+
+  "remoteUser": "vscode",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "charliermarsh.ruff",
+        "ms-azuretools.vscode-docker",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "GitHub.codespaces"
+      ]
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup_envs.sh",
+
   "remoteEnv": {
     "KAGGLE_USERNAME": "${{ secrets.KAGGLE_USERNAME }}",
     "KAGGLE_KEY": "${{ secrets.KAGGLE_KEY }}"
   },
-  "postStartCommand": "python3 .devcontainer/setup_kaggle_creds.py"
+
+  "postStartCommand": "python3 .devcontainer/setup_kaggle_creds.py",
+
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+
+  "runArgs": [
+    "--privileged"
+  ]
 }

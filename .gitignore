@@ -201,7 +201,21 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
-# Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
+# --- Project-specific ignores ---
+# Virtual environments
+airflow_venv/
+main_venv/
+.venv/
+
+# Jupyter notebooks and outputs
+.ipynb_checkpoints/
+*.ipynb
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Data folders (do not commit large/generated data)
+data/postgres/
+data/raw/
