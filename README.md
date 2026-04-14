@@ -117,3 +117,39 @@ streamlit run dashboard/maintenance_copilot.py
 ```
 
 *LLM integration is a placeholder; see code for extension points.*
+
+---
+
+## 🤖 Maintenance Copilot (LLM) Dashboard
+
+A Streamlit app with real LLM integration is available at `dashboard/maintenance_copilot_llm.py`. It provides:
+- Asset-level FHI, OEE, and RUL metrics
+- Recent ERP maintenance logs
+- Executive and root-cause insights powered by OpenAI GPT-3.5-turbo
+
+**Usage:**
+1. Set your OpenAI API key in the environment: `export OPENAI_API_KEY=sk-...`
+2. Run:
+   ```bash
+   streamlit run dashboard/maintenance_copilot_llm.py
+   ```
+
+*If no API key is set, the app will prompt for it and fallback to placeholder logic.*
+
+---
+
+## 🤖 Maintenance Copilot (LLM+Roles) Dashboard
+
+A Streamlit app for root-cause analysis with stakeholder role simulation is available at `dashboard/maintenance_copilot_roles.py`. It provides:
+- Asset-level FHI, OEE, and RUL metrics
+- Recent ERP maintenance logs
+- LLM-powered root-cause answers tailored to simulated roles (Engineer, Manager, Data Scientist, QA, Analyst)
+
+**Usage:**
+1. Set your OpenAI API key in the environment: `export OPENAI_API_KEY=sk-...`
+2. Run:
+   ```bash
+   streamlit run dashboard/maintenance_copilot_roles.py
+   ```
+
+*Select a stakeholder role in the sidebar to simulate different perspectives in root-cause analysis.*
