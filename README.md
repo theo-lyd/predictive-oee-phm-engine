@@ -1,6 +1,12 @@
 # predictive-oee-phm-engine
 
-An Industry 4.0 predictive maintenance platform. Harmonizes NASA Turbofan IoT data with legacy ERP logs using a dbt-Databricks Medallion Architecture. Features RUL benchmarking, automated German market data normalization, and an LLM-powered "Maintenance Copilot" for prescriptive root-cause analysis.
+
+An Industry 4.0 predictive maintenance platform. Harmonizes NASA Turbofan IoT data with legacy ERP logs using a dbt-Databricks Medallion Architecture. Features:
+- RUL benchmarking and robust ML tournament (Random Forest, Linear Regression, XGBoost) with advanced tuning, diagnostics, and explainability
+- Automated German market data normalization
+- KMeans anomaly segmentation with health zone profiling
+- LLM-powered "Maintenance Copilot" for prescriptive root-cause analysis
+- Full documentation of enhancements and results in phase reports
 
 ---
 

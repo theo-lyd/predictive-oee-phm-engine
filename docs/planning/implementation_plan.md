@@ -158,6 +158,13 @@ Implement data integrity and logic contracts at the Gold boundary using Great Ex
   - All `sensor_timestamp` values are strictly increasing per unit
 - Ran the GE suite and confirmed both expectations pass on the Gold table
 
+### Batch 3.3 Status: Complete (2026-04-13)
+- Gold layer model `nasa_gold` implemented in `dbt/models/gold/`.
+- Model exposes min-max normalized `quality` and strictly increasing `sensor_timestamp` per unit, using the same logic as Silver.
+- Great Expectations suite implemented and run in `great_expectations/run_gold_suite.py`.
+- All integrity and logic contracts validated: all `quality` in [0, 1], all `sensor_timestamp` strictly increasing per unit.
+- See `docs/phase-reports/phase-3/phase-3-gold-batch-3-3.md` for full command log and outcomes.
+
 ### Architectural/Naming Choices
 - **Physical Table Naming:** NASA raw data is ingested as `bronze_nasa_train_physical` to avoid dbt recursion issues. The dbt model `bronze_nasa_train` is a view on this physical table, enabling clean separation between ingestion and modeling layers.
 - **Gold Model Naming:** The Gold model is named `nasa_gold` to clearly indicate its layer and source. This avoids confusion with raw/bronze tables and supports modular pipeline design.
@@ -191,8 +198,20 @@ Implement data integrity and logic contracts at the Gold boundary using Great Ex
 	$$RUL_{target} = Cycle_{max} - Cycle_{current}$$
 
 ### Batch 4.2: Benchmarking & Segmentation
-* **Chunk 3: The Algorithm Tournament:** Benchmark the Random Forest against a **Linear Regression** and **XGBoost**. Store RMSE (Root Mean Square Error) results in a `model_performance` table and compare RMSE (Root Mean Square Error) to determine the "Production Model."
-* **Chunk 4: Anomaly Clustering:** Use **K-Means Clustering** to segment sensor anomalies into specific failure modes (e.g., *Thermal Fatigue* vs. *High Vibration*). Cluster machines into "Health Zones" (Green/Yellow/Red) based on the current probability of failure.
+
+* **Chunk 3: The Algorithm Tournament:**
+  - Benchmarked Random Forest, Linear Regression, and XGBoost for RUL prediction.
+  - Applied advanced enhancements: hyperparameter tuning, scaling, regularization, cross-validation, and SHAP explainability (where appropriate).
+  - RMSE results are stored in the `model_performance` table; the best model is flagged.
+  - Enhanced models outperformed initial baselines in both accuracy and robustness.
+
+* **Chunk 4: Anomaly Clustering:**
+  - KMeans clustering (with feature scaling) segments sensor anomalies into failure modes (e.g., Thermal Fatigue, High Vibration).
+  - Assets are clustered into "Health Zones" (Green/Yellow/Red) based on RUL and sensor features.
+  - Cluster statistics (mean/std of RUL and features) are stored in `kmeans_cluster_diagnostics` for interpretability.
+
+**Summary:**
+All enhancements were justified for this industrial dataset. Tuning, scaling, diagnostics, and explainability improved both accuracy and trustworthiness. Not all enhancements are equally critical for every algorithm, but all contribute to a robust, production-ready solution. See `docs/phase-reports/phase-4/phase-4-ml-tournament-report.md` for full results and analysis.
 
 ---
 
@@ -240,6 +259,7 @@ To restore traceability, a mistaken large batch commit was replaced with a serie
 - Keep command and runbook files up to date for full transparency.
 
 ---
+
 ### Why this is "Thesis-Level" Prowess:
 By the end of this plan, you will have built a **fully functional, predictive industrial system** on a local DuckDB engine. You will have successfully navigated:
 1. Complex Encodings: Solving for the "German Constraint."
@@ -259,3 +279,30 @@ By following this plan, you will deliver a fully functional, explainable, and go
 - Technical depth (ML in-warehouse, encoding/normalization, CI/CD)
 - Business impact (downtime reduction, OEE improvement, actionable insights)
 - Modern engineering practices (reproducibility, auditability, stakeholder enablement)
+
+### 2026-04-13: Phase 3 Data Quality & Engineering Improvements
+
+**Summary:**
+To align with modern industry standards and ensure robust analytics, the following improvements were made to the Silver and Gold NASA sensor data layers:
+
+#### 1. dbt-native Data Quality Tests
+- Added dbt-native tests for:
+  - Not null constraints on `unit_number`, `sensor_timestamp`, and `quality`.
+  - Multi-column uniqueness on `(unit_number, sensor_timestamp)` using `dbt_utils.unique_combination_of_columns`.
+  - Value range check for `quality` using `dbt_utils.expression_is_true` to ensure all values are in [0, 1].
+- These tests now run with `dbt test` and all pass, providing fast, CI-friendly validation.
+
+#### 2. SQL Optimization & Explicit Column Selection
+- Refactored both `nasa_silver.sql` and `nasa_gold.sql` to:
+  - Select only required columns (no `select *`).
+  - Use explicit column names for clarity and performance.
+- This reduces unnecessary data movement and improves maintainability.
+
+#### 3. Macro Reuse for Min-Max Normalization
+- Created a macro `min_max_normalize` in `dbt/macros/min_max_normalize.sql` to encapsulate the normalization logic.
+- Both Silver and Gold models now use this macro for the `quality` calculation, ensuring consistency and easier future updates.
+
+**Outcome:**
+- All dbt-native tests pass for both layers.
+- Data models are more efficient, maintainable, and aligned with best practices.
+- The pipeline is now robust, testable, and ready for further enhancements or productionization.

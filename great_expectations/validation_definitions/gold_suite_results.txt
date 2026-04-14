@@ -1,0 +1,2 @@
+Quality expectation: True
+Monotonic timestamp expectation: True

@@ -12,17 +12,12 @@ with base as (
         cast("2" as double) as op_setting_1,
         cast("3" as double) as op_setting_2,
         cast("4" as double) as op_setting_3,
-        -- Min-max normalize sensor 6 (column "5") per unit to get quality between 0 and 1
-        (cast("5" as double) - min(cast("5" as double)) over (partition by cast("0" as integer))) /
-        nullif(max(cast("5" as double)) over (partition by cast("0" as integer)) - min(cast("5" as double)) over (partition by cast("0" as integer)), 0)
-        as quality,
-        -- Use cycle as the strictly increasing timestamp per unit
-        cast("1" as integer) as sensor_timestamp,
-        *
+        {{ min_max_normalize('"5"', 'cast("0" as integer)') }} as quality,
+        cast("1" as integer) as sensor_timestamp
     from bronze_nasa_train
 )
 
-select *
+select unit_number, cycle, op_setting_1, op_setting_2, op_setting_3, quality, sensor_timestamp
 from base
 qualify row_number() over (partition by unit_number order by cycle) = 1
 order by unit_number, cycle

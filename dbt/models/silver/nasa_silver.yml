@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: nasa_silver
+    columns:
+      - name: unit_number
+        tests:
+          - not_null
+      - name: sensor_timestamp
+        tests:
+          - not_null
+      - name: quality
+        tests:
+          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - unit_number
+            - sensor_timestamp
+      - dbt_utils.expression_is_true:
+          expression: "quality >= 0 and quality <= 1"
