@@ -6,6 +6,7 @@ Generate simulated German ERP maintenance logs with:
 - German status strings (e.g., 'Instandhaltung erforderlich')
 - Factory locations with Umlaute (e.g., 'München', 'Göttingen')
 """
+
 import csv
 import random
 from datetime import datetime, timedelta
@@ -17,13 +18,21 @@ OUTPUT_FILE = "data/raw/erp_maintenance_logs.csv"
 FACTORIES = ["München", "Göttingen", "Düsseldorf", "Köln", "Leipzig"]
 
 # German status strings
-STATI = ["Instandhaltung erforderlich", "Wartung abgeschlossen", "Betrieb normal", "Störung erkannt"]
+STATI = [
+    "Instandhaltung erforderlich",
+    "Wartung abgeschlossen",
+    "Betrieb normal",
+    "Störung erkannt",
+]
 
 # Asset types
 ASSETS = ["Motor", "Pumpe", "Kompressor", "Ventil"]
 
 # Helper to format numbers in German style
-format_german_number = lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+format_german_number = (
+    lambda x: f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+)
+
 
 # Generate random ERP maintenance log entries
 def generate_logs(num_records=100):
@@ -36,14 +45,9 @@ def generate_logs(num_records=100):
         status = random.choice(STATI)
         cost = random.uniform(500, 5000)
         cost_str = format_german_number(cost)
-        logs.append([
-            date.strftime("%d.%m.%Y"),
-            asset,
-            factory,
-            status,
-            cost_str
-        ])
+        logs.append([date.strftime("%d.%m.%Y"), asset, factory, status, cost_str])
     return logs
+
 
 if __name__ == "__main__":
     logs = generate_logs(200)
@@ -51,4 +55,6 @@ if __name__ == "__main__":
         writer = csv.writer(f, delimiter=";")
         writer.writerow(["Datum", "Anlage", "Standort", "Status", "Kosten (EUR)"])
         writer.writerows(logs)
-    print(f"Generated {len(logs)} ERP maintenance logs to {OUTPUT_FILE} (ISO-8859-1, German format)")
+    print(
+        f"Generated {len(logs)} ERP maintenance logs to {OUTPUT_FILE} (ISO-8859-1, German format)"
+    )
