@@ -77,3 +77,26 @@ This project natively ingests both NASA Turbofan IoT data and simulated German E
 - Airbyte has been fully replaced by native Python + dbt + DuckDB scripts for ingestion.
 
 See [Implementation Plan](docs/planning/implementation_plan.md) for details.
+
+---
+
+## Factory Health Index (FHI)
+
+A unified metric combining OEE and normalized RUL for each asset. See [phase-5/factory_health_index.md](docs/phase-reports/phase-5/factory_health_index.md) for definition and usage. Visualized in the dashboard and available in the gold layer as `factory_health_index`.
+
+---
+
+## 📊 Factory Health Dashboard
+
+A Streamlit dashboard is available at `dashboard/factory_health_dashboard.py` to visualize:
+- Factory Health Index (FHI)
+- OEE and RUL by asset
+- FHI distribution and OEE vs. normalized RUL
+
+Run with:
+
+```bash
+streamlit run dashboard/factory_health_dashboard.py
+```
+
+See [phase-5/factory_health_index.md](docs/phase-reports/phase-5/factory_health_index.md) for metric details.

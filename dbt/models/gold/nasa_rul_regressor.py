@@ -271,7 +271,8 @@ def model(dbt, session):
     session.execute(f'CREATE TABLE kmeans_cluster_diagnostics ({col_defs})')
     for profile in cluster_profiles:
         vals = [profile[k] for k in profile if k != 'cluster'] + [profile['cluster']]
-        session.execute(f'INSERT INTO kmeans_cluster_diagnostics VALUES ({', '.join(['?']*len(vals))})', tuple(vals))
+        placeholders = ', '.join(['?'] * len(vals))
+        session.execute(f'INSERT INTO kmeans_cluster_diagnostics VALUES ({placeholders})', tuple(vals))
     # Store predictions and cluster assignments in output DataFrame
     test_df = test_df.copy()
     test_df['rul_pred'] = preds
