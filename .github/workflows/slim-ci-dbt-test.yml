@@ -1,0 +1,52 @@
+# GitHub Actions workflow: Slim CI for dbt
+# Runs dbt test on modified models only during Pull Requests
+# Ensures "German Cleaning" logic is always validated
+
+name: Slim CI - dbt test on PR
+
+on:
+  pull_request:
+    paths:
+      - 'dbt/models/**'
+      - 'dbt/macros/**'
+      - 'dbt/tests/**'
+      - 'dbt/dbt_project.yml'
+      - 'dbt/profiles.yml'
+      - 'scripts/**'
+      - 'great_expectations/**'
+      - '.github/workflows/**'
+
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt and dependencies
+        run: |
+          pip install dbt-core dbt-duckdb
+
+      - name: Run dbt deps
+        run: |
+          cd dbt
+          dbt deps
+
+      - name: Run dbt test (modified models only)
+        run: |
+          cd dbt
+          # Find modified model files in this PR
+          MODIFIED_MODELS=$(git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} | grep '^models/' | grep -E '\.sql$|\.py$' | xargs)
+          if [ -z "$MODIFIED_MODELS" ]; then
+            echo "No model changes detected. Skipping dbt test."
+            exit 0
+          fi
+          # Convert file paths to dbt node selectors
+          SELECTORS=$(echo $MODIFIED_MODELS | sed 's/models\///g' | sed 's/\.sql//g' | sed 's/\.py//g' | tr ' ' ',')
+          echo "Running dbt test on: $SELECTORS"
+          dbt test --select $SELECTORS

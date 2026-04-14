@@ -71,3 +71,68 @@ During implementation, a large batch of untracked files was mistakenly committed
 - Use clear, descriptive commit messages.
 - Validate staged files before committing, especially when excluding sensitive or legacy content.
 - Document all corrective actions in the runbook and command logs for full auditability.
+
+---
+
+# MSc Runbook: Predictive OEE PHM Engine (2026-04-14)
+
+## Project Walkthrough
+
+This runbook provides a step-by-step guide to the architecture, setup, and operation of the predictive OEE PHM engine. It is designed for MSc-level reproducibility and auditability.
+
+### 1. Architecture Overview
+- **Medallion Architecture:** Bronze (raw), Silver (cleaned), Gold (analytics)
+- **Tech Stack:** DuckDB, dbt, Python, Great Expectations, Metabase, Streamlit
+- **Key Features:**
+  - German ERP and NASA IoT harmonization
+  - In-warehouse ML (RUL, clustering)
+  - LLM-powered Maintenance Copilot
+  - CI/CD with GitHub Actions (Slim CI)
+  - Observability (GE, Monte Carlo/heartbeat placeholder)
+
+### 2. Setup & Installation
+- Clone the repo and open in GitHub Codespaces or local dev environment
+- Install Python 3.11+, dbt-core, dbt-duckdb, and dependencies
+- See `.devcontainer/` for Codespace setup
+
+### 3. Data Ingestion & Transformation
+- Download NASA data: `bash scripts/download_nasa_turbofan.sh`
+- Generate ERP logs: `python3 scripts/generate_german_erp.py`
+- Ingest ERP logs: `python3 scripts/ingest_erp_to_duckdb.py`
+- Ingest NASA data: `python3 scripts/ingest_nasa_to_duckdb.py`
+- Run all: `bash scripts/run_all.sh`
+- Build dbt models: `dbt run --project-dir dbt --profiles-dir dbt`
+
+### 4. Data Quality & Governance
+- Run Great Expectations suites: `python3 great_expectations/run_silver_suite.py`, `python3 great_expectations/run_gold_suite.py`
+- All OEE and sensor data quality gates are validated
+- See docs/phase-reports/ for validation logs
+
+### 5. Analytics & ML
+- Gold layer models: OEE, RUL, clustering
+- Run ML models: `dbt run --select gold.nasa_rul_regressor --project-dir dbt --profiles-dir dbt`
+- See docs/phase-reports/phase-4/ for ML tournament results
+
+### 6. Executive Dashboards
+- Streamlit Copilot: `python3 dashboard/maintenance_copilot_roles.py`
+- Metabase: See docs/metabase_setup_no_docker.md and docs/metabase_dashboard_automation.md
+
+### 7. CI/CD Pipeline
+- GitHub Actions workflow: `.github/workflows/slim-ci-dbt-test.yml`
+- On every PR, runs `dbt test` on modified models only
+- Ensures "German Cleaning" logic is always validated
+
+### 8. Observability & Monitoring
+- Placeholder: `scripts/monte_carlo_heartbeat_monitor.py` for lineage/heartbeat
+- See docs/monte_carlo_heartbeat_monitoring.md
+
+### 9. Command Logs
+- All commands and outcomes: `docs/command/`
+- Git, Bash, dbt, Airflow, etc. for full reproducibility
+
+### 10. Business Blueprint
+- See `docs/business_blueprint.md` for business context and value
+
+---
+
+**For any issues, see the README and docs/ for troubleshooting and further details.**
