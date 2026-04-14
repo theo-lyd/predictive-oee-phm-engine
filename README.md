@@ -100,3 +100,20 @@ streamlit run dashboard/factory_health_dashboard.py
 ```
 
 See [phase-5/factory_health_index.md](docs/phase-reports/phase-5/factory_health_index.md) for metric details.
+
+---
+
+## 🤖 Maintenance Copilot Dashboard
+
+A Streamlit app for executive and root-cause insights is available at `dashboard/maintenance_copilot.py`. It provides:
+- Asset-level FHI, OEE, and RUL metrics
+- Recent ERP maintenance logs
+- LLM-style context synthesis and root-cause explanations (placeholder logic)
+
+Run with:
+
+```bash
+streamlit run dashboard/maintenance_copilot.py
+```
+
+*LLM integration is a placeholder; see code for extension points.*
