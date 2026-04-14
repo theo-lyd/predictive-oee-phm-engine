@@ -1,0 +1,24 @@
+
+[tool.black]
+line_length = 88
+target_version = ["py311"]
+
+
+[tool.flake8]
+max_line_length = 88
+extend_ignore = ["E203", "W503"]
+
+
+[tool.isort]
+profile = "black"
+
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+
+
+[tool.sqlfluff]
+dialect = "duckdb"
+exclude_rules = ["L009", "L031"]
+max_line_length = 120

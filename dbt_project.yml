@@ -1,0 +1,10 @@
+name: 'factory_analytics'
+version: '1.0.0'
+config-version: 2
+profile: 'dbt'
+model-paths: ["dbt/models"]
+macro-paths: ["dbt/macros"]
+
+models:
+  factory_analytics:
+    +materialized: table

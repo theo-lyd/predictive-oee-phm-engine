@@ -1,0 +1,4 @@
+# .sqlfluff: SQLFluff configuration for dbt/DuckDB
+[sqlfluff]
+dialect = duckdb
+exclude_rules = L009,L031

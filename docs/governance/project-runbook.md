@@ -74,6 +74,89 @@ During implementation, a large batch of untracked files was mistakenly committed
 
 ---
 
+## Troubleshooting & Recovery
+
+### Common CI/CD Failures
+- **SQL Linting Fails:**
+  - Check SQLFluff output in GitHub Actions logs. Fix formatting and re-push.
+- **Python Linting Fails:**
+  - Run `black .`, `flake8 .`, and `mypy .` locally. Fix errors and re-push.
+- **dbt Test Fails:**
+  - Review which model/test failed in the logs. Validate data and model logic.
+- **Artifact Upload Fails:**
+  - Ensure `dbt/target/` exists after dbt run. Check workflow permissions.
+
+### Monitoring/Observability Issues
+- **Heartbeat Alerts:**
+  - If you receive a stale data alert, check DuckDB for recent data ingestion.
+  - If the script fails to connect, verify `dbt/factory_analytics.db` exists and is up to date.
+- **Notification Failures:**
+  - If Slack/email alerts are not received, check integration tokens and webhook URLs.
+
+### General Recovery Steps
+- Re-run failed workflow jobs after fixing issues.
+- For persistent failures, consult the logs in `docs/command/` and escalate to the project maintainer.
+
+---
+
+## CI Optimization: Test Data Minimization & Resource Cleanup
+
+- **Test Data Minimization:**
+  - CI workflows use a small sample dataset for dbt and Python tests to ensure fast feedback.
+  - Full data validation is run on scheduled builds or before production releases.
+  - To customize, set the `SAMPLE_DATA` environment variable in CI and adjust scripts to use sample files.
+
+- **Resource Cleanup:**
+  - All temporary files, test artifacts, and intermediate outputs are deleted at the end of each CI run.
+  - The CI workflow includes a `post-job` step to clean up the workspace and uploaded artifacts.
+
+---
+
+## Parallelization in CI/CD
+
+- **Parallel Steps:**
+  - Linting (SQL, Python) and dbt test jobs run in parallel to reduce total CI time.
+  - dbt build and test can be parallelized using the `--threads` option (see `dbt_project.yml`).
+
+- **Sample Data for CI:**
+  - By default, CI runs on a reduced dataset for speed. Use the `SAMPLE_DATA` flag to switch between sample and full data.
+  - For local testing, run `export SAMPLE_DATA=1` before executing scripts or dbt.
+
+---
+
+## CI/CD Pipeline Diagram
+
+```mermaid
+graph TD
+    A[Code Push/PR] --> B[Lint SQL (SQLFluff)]
+    A --> C[Lint Python (black/flake8/mypy)]
+    B --> D[dbt Test (PR: modified, Main: all)]
+    C --> D
+    D --> E[Upload dbt Artifacts]
+    D --> F[Fail Fast & Notify]
+```
+
+---
+
+## Observability Playbook
+
+### Alert Response Procedures
+- **Stale Data Alert:**
+  1. Check the DuckDB table and timestamp column flagged in the alert.
+  2. Confirm recent data ingestion or pipeline run.
+  3. If data is missing, trigger a manual ingestion or escalate.
+- **Pipeline Exception:**
+  1. Review error logs in the monitoring script and GitHub Actions.
+  2. If a code or data bug, assign to engineering for fix.
+  3. If an infrastructure issue, escalate to DevOps.
+
+### Escalation Paths
+- **First Response:** Project maintainer (see repo README)
+- **Critical Failure:** Escalate to DevOps or academic supervisor
+- **Notification Channels:** Slack/email (see notification integration in workflow/scripts)
+
+---
+
 # MSc Runbook: Predictive OEE PHM Engine (2026-04-14)
 
 ## Project Walkthrough

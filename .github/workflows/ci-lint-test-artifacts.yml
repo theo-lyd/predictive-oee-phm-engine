@@ -1,0 +1,100 @@
+# Lint and Test Workflow for dbt, SQL, and Python
+# - Lints SQL with SQLFluff
+# - Lints Python with black, flake8, mypy
+# - Runs dbt test on PRs (modified models) and on push to main (all models)
+# - Uploads dbt artifacts
+# - Fails fast and notifies on failure
+
+name: CI - Lint, Test, Artifacts
+
+on:
+  pull_request:
+    paths:
+      - 'dbt/models/**'
+      - 'dbt/macros/**'
+      - 'dbt/tests/**'
+      - 'dbt/dbt_project.yml'
+      - 'dbt/profiles.yml'
+      - 'scripts/**'
+      - 'great_expectations/**'
+      - '.github/workflows/**'
+      - '**.py'
+      - '**.sql'
+      - '**.yml'
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  lint-sql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install SQLFluff
+        run: pip install sqlfluff sqlfluff-templater-dbt
+      - name: Lint SQL files
+        run: sqlfluff lint dbt/models dbt/macros
+
+  lint-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python linters
+        run: pip install black flake8 mypy
+      - name: Run black
+        run: black --check .
+      - name: Run flake8
+        run: flake8 .
+      - name: Run mypy
+        run: mypy .
+
+  dbt-test:
+    runs-on: ubuntu-latest
+    needs: [lint-sql, lint-python]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dbt and dependencies
+        run: pip install dbt-core dbt-duckdb
+      - name: Run dbt deps
+        run: |
+          cd dbt
+          dbt deps
+      - name: Run dbt test (PR: modified models, push: all)
+        run: |
+          cd dbt
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            MODIFIED_MODELS=$(git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} | grep '^models/' | grep -E '\.sql$|\.py$' | xargs)
+            if [ -z "$MODIFIED_MODELS" ]; then
+              echo "No model changes detected. Skipping dbt test."
+              exit 0
+            fi
+            SELECTORS=$(echo $MODIFIED_MODELS | sed 's/models\///g' | sed 's/\.sql//g' | sed 's/\.py//g' | tr ' ' ',')
+            echo "Running dbt test on: $SELECTORS"
+            dbt test --select $SELECTORS
+          else
+            echo "Running dbt test on all models (main branch)"
+            dbt test
+          fi
+      - name: Upload dbt artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-artifacts
+          path: dbt/target/
+      - name: Fail Fast and Notify
+        if: failure()
+        run: |
+          echo "Build failed! Please check the logs."
+          # Add Slack or email notification integration here
