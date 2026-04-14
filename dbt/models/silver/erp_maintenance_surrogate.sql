@@ -10,5 +10,9 @@ with numeric as (
 
 select
     *,
-    {{ dbt_utils.generate_surrogate_key(['datum', 'anlage', 'standort']) }} as universal_asset_id
+    {{ dbt_utils.generate_surrogate_key([
+        'datum',
+        'anlage',
+        'standort'
+    ]) }} as universal_asset_id
 from numeric
