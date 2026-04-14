@@ -224,3 +224,15 @@ data/raw/
 /dbt/dbt_packages/
 /dbt/package-lock.yml
 /dbt/packages.yml
+
+# Metabase runtime files
+*.jar
+*.mv.db
+*.trace.db
+
+# Optional: ignore all DB files
+*.db
+
+# If Metabase drivers are in a folder:
+metabase.db*
+*.metabase-driver.jar
