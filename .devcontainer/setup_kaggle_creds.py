@@ -7,7 +7,7 @@ kaggle_dir.mkdir(exist_ok=True)
 kaggle_json = kaggle_dir / "kaggle.json"
 creds = {
     "username": os.environ.get("KAGGLE_USERNAME", ""),
-    "key": os.environ.get("KAGGLE_KEY", "")
+    "key": os.environ.get("KAGGLE_KEY", ""),
 }
 with open(kaggle_json, "w") as f:
     json.dump(creds, f)
